@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>học tiếng phần</title>
+</head>
+<style type="text/css">
+body {
+  background: #223232;
+  height: 100vh;
+  overflow: hidden;
+  display: flex; /*Hiển thị*/
+  flex-direction: column; /* thêm thuộc tính này để flex items dọc theo trục chính (y-axis) */
+  justify-content: center;
+  align-items: center; /* căng giữa theo chiều dọc */
+}
+.phone {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #222;
+}
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 10px;
+  padding: 20px;
+  background-color: #444;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+.key {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2em;
+  color: #fff;
+  background-color: #666;
+  border-radius: 50%;
+  height: 80px;
+  width: 80px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  outline: none;
+  border: none;
+}
+h1{
+	color:#323232;
+}
+.key:active {
+  transform: translateY(2px);
+  box-shadow: none;
+}
+button {
+	color: #e8e8e8;
+  width: 50px;
+  height: 50px;
+  background-color: #333;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+#score{
+  width: 200px;
+  height: 100px;
+  background: #777;
+  color: #e8e8e8;
+}
+#score{
+  background: #e8e8e8;
+  color: #777;
+}
+button:hover {
+	color: #000;
+  background-color: #666;
+  background: #e8e8e8;
+}
+#nd{
+	background-color: #333; /* đổi màu nền */
+  color: #e7e7e7; /* đổi màu chữ */
+  border: none; /* bỏ viền */
+  padding: 10px; /* thêm padding cho đẹp */
+  border-radius: 5px; /* bo góc */
+}
+#play{
+	color: #e8e8e8;
+	background: #000;
+	
+  border: none;
+  border-radius: 5px;
+  transition: 0.2s ease-in-out;
+  line-height: 40px; /* căn giữa theo trục dọc */
+}
+#play:hover{
+	color: #000;
+	background: #e8e8e8;
+	cursor: pointer;
+}
+audio{
+	height: 0px;/*thay vì dùng none ta có thể thay đổi kích thước của nó*/
+	width: 0px ;
+}
+#name{
+
+	color: #000;
+}
+#show_kq{
+  color: #e8e8e8;
+}
+</style>
+<body>
+<button id="play" onclick="playMusic()">Start</button>
+<p id="score">score: 0</p>
+<p id="show_kq"></p>
+	<audio id="run"controls>
+  <source id="music" src="" type="audio/ma4"> 
+</audio>
+	<h1 id="name" style="color:none">4/5/2023</h1>
+<div style="display: inline-block; justify-content: space-between width:100px;">
+	<p id="nd" style="display: inline-block; width:100px; height: 25px;">nhập kết quả...</p>
+	<button id="ac" onclick="ac()">AC</button>
+	<button id="del" onclick="del()">DEL</button>
+	<button id="kt" onclick="kt_nd()"><--</button>
+</div>
+	<auto></auto>
+	<div class="phone">
+  <div class="keypad">
+    <button class="key" onclick="onClick()">1</button>
+    <button class="key" onclick="onClick()">2</button>
+    <button class="key" onclick="onClick()">3</button>
+    <button class="key" onclick="onClick()">4</button>
+    <button class="key" onclick="onClick()">5</button>
+    <button class="key" onclick="onClick()">6</button>
+    <button class="key" onclick="onClick()">7</button>
+    <button class="key" onclick="onClick()">8</button>
+    <button class="key" onclick="onClick()">9</button>
+    <p></p>
+    <button id="0" class="key" onclick="onClick()">0</button>
+    <p></p>
+  </div>
+</div>
+<script type="text/javascript">
+  let score=0;
+	let number_auto=["0.m4a"];
+	var audio = document.getElementById("myAudio");
+	var number,number_iphone="0";
+	let array_number=[],array_iphone=[];
+  var nhap_duoc = '';
+  var luot=0;
+function random_iphone(number,number_iphone) {
+
+  
+  const auto = ["0.m4a", "1.m4a", "2.m4a", "3.m4a", "4.m4a", "5.m4a", "6.m4a", "7.m4a", "8.m4a", "9.m4a"];
+  for (var i = 0; i <9; i++) {
+   // chèn số vô random sđt
+    var number=Math.floor(Math.random() * 10);
+    array_number.push(number);
+    number_auto.push(auto[array_number[i]]);
+    
+}
+array_number.splice(0, 0, 0);
+if (array_number[array_number.length - 1] === undefined) {
+  array_number.pop();
+}
+ if (luot>1){
+    document.getElementById("name").innerHTML = "Tiếp tục lượt chơi mới.";
+  }
+}
+random_iphone(number,number_iphone);
+
+array_number.push(number);
+function playMusic() {
+  var audio = document.getElementById("run");
+  var index = 0;
+  audio.onended = function() {
+    index++;
+    if (index < number_auto.length) {
+      audio.src = number_auto[index];
+      audio.play();
+    }
+  }
+  audio.src = number_auto[index];
+  audio.play();
+}
+console.log(number_auto);
+function ac() {
+  nhap_duoc="";
+  array_iphone=[];
+  document.getElementById("nd").innerHTML = "Nhập kết quả...";
+}
+	function del() {    
+	  	var c=nhap_duoc[nhap_duoc.length-1];
+	  	var d=nhap_duoc.length;
+	  	var a=array_iphone[array_iphone.length-1];
+	  	if (d==0){
+	  		return 0;
+	  	}
+	  	array_iphone.pop(a);
+		  if (d==1){
+		  	document.getElementById("nd").innerHTML = "Nhập kết quả...";
+		  	return 0;
+		  }	  
+			newStr = nhap_duoc.replace(c, '');
+			nhap_duoc=newStr;
+			document.getElementById("nd").innerHTML = newStr;	  
+		}
+function onClick() {
+	if (array_iphone.length==10){
+		return 0;
+	}
+  let button = event.target;
+  let number = button.innerText;
+  nhap_duoc += number;
+  array_iphone.push(Number(number));
+  document.getElementById("nd").innerHTML = nhap_duoc;
+}
+function kt_nd() {
+	if (array_iphone.length!=10){
+		return 0;
+	}
+	else{	
+	var nd1="",nd2=""; // nên để rổng đã sử lý phía trên
+	var i;
+	for(i=0;i<=8;i++){
+			nd1+=String(array_iphone[i]);
+			nd2+=String(array_number[i]);
+
+}
+
+console.log(nd1,nd2);
+if (nd1==nd2){
+  score+=100;
+	document.getElementById("name").innerHTML = "bạn đã nhập đúng.";
+  document.getElementById("score").innerHTML = "score :"+score;
+	nhap_duoc="";
+	array_iphone=[];
+  array_number=[];
+  array_iphone=[];
+  number_iphone="0";
+  number_auto=["0.m4a"];
+  nd1=nd2="";
+  luot+=1;
+  random_iphone(number,number_iphone);
+	return 0;
+}
+else{
+      luot+=1;
+      if (score!=0){
+        score-=20;
+      }
+      console.log(number_auto);
+      document.getElementById("score").innerHTML = "score: "+score;
+			document.getElementById("name").innerHTML = "Bạn đã nhập sai.";
+      document.getElementById("show_kq").innerHTML = nd2;
+      nhap_duoc="";
+      array_iphone=[];
+      array_number=[];
+      array_iphone=[];
+      number_iphone="0";
+      number_auto=["0.m4a"];
+      nd1=nd2="";
+      random_iphone(number,number_iphone);
+			return 0;
+		}
+	}
+	}
+</script>
+</body>
+</html>
